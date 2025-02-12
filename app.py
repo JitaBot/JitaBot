@@ -1,10 +1,13 @@
 from flask import Flask, request, jsonify
+import random
 
 app = Flask(__name__)
 
 @app.route("/callback", methods=["POST"])
 def callback():
-    return jsonify({"message": "OK"}), 200  # JSONで返す
+    stars = ["⭐", "⭐⭐", "⭐⭐⭐", "⭐⭐⭐⭐", "⭐⭐⭐⭐⭐"]
+    fortune = random.choice(stars)  # ランダムに星を選ぶ
+    return jsonify({"fortune": fortune}), 200  # JSON形式で返す
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000)
