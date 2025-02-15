@@ -1,73 +1,47 @@
-import os
-import requests
 from flask import Flask, request, jsonify
 import random
 import datetime
+import os
+import requests
 
 app = Flask(__name__)
 
-# 占いメッセージ（関西弁）
-fortune_messages = {
-    "運勢": ["🌟 大吉：今日は素晴らしい1日になりそうやで！", 
-              "🌸 中吉：穏やかでええ感じの日になるわ！", 
-              "🌙 吉：安定した運気が流れとるで！", 
-              "💀 凶：慎重に行動するのが吉やな。"],
-    "金運": ["💴 今日は財布の紐、しっかり締めるんやで！", 
-             "💰 思わぬ臨時収入があるかも知れへんで！", 
-             "🌠 金の流れは星の巡りにも関係しとるで！"],
-    "恋愛": ["💞 今日は運命の出会いがあるかもしれへんで！", 
-             "💕 恋のチャンス、逃したらあかんで！", 
-             "💔 今日は一歩引いて相手を見つめ直す日やな。"],
-    "ラッキーカラー": ["🎨 今日のラッキーカラーは『ピンク』やで！", 
-                        "🎨 今日のラッキーカラーは『ブルー』やで！", 
-                        "🎨 今日のラッキーカラーは『ゴールド』やで！"]
-}
+# 運勢メッセージリスト
+fortune_messages = [
+    "🌟 大吉：今日は素晴らしい1日になりそうやで！",
+    "🌸 中吉：穏やかに過ごせる日やで〜。",
+    "🎋 小吉：安定した運気が流れてるわ！",
+    "💀 凶：慎重に行動するのが吉やな。"
+]
 
-# ユーザーごとのデータ管理（シンプル版）
-user_data = {}
+# ユーザーごとの運勢を保存する辞書
+user_fortunes = {}
 
-# Webhookエンドポイント
 @app.route("/webhook", methods=["POST"])
 def webhook():
     event = request.json
     for e in event["events"]:
         if e["type"] == "message" and e["message"]["type"] == "text":
-            user_id = e["source"]["userId"]
             reply_token = e["replyToken"]
             user_message = e["message"]["text"]
+            user_id = e["source"]["userId"]
 
-            # ログ出力
-            print(f"[{datetime.datetime.now()}] User: {user_id}, Message: {user_message}")
+            # 今日の日付を取得
+            today = datetime.date.today().strftime("%Y-%m-%d")
 
-            # 今日の日付取得
-            today = datetime.date.today().isoformat()
+            # ユーザーごとの運勢を1日1回だけ設定
+            if user_id not in user_fortunes or user_fortunes[user_id]["date"] != today:
+                user_fortunes[user_id] = {
+                    "fortune": random.choice(fortune_messages),
+                    "date": today
+                }
 
-            # 1日1回の結果固定処理
-            if user_id not in user_data or user_data[user_id].get("date") != today:
-                user_data[user_id] = {"date": today, "results": {}}
-
-            # キーワードに基づく応答
-            response = None
-            for keyword, messages in fortune_messages.items():
-                if keyword in user_message:
-                    # 1日1回固定結果取得
-                    if keyword not in user_data[user_id]["results"]:
-                        result = random.choice(messages)
-                        user_data[user_id]["results"][keyword] = result
-                    response = user_data[user_id]["results"][keyword]
-                    break
-
-            # 該当する応答がない場合のデフォルトメッセージ
-            if not response:
-                response = "🤖 すまんけど、その質問には答えられへんわ。"
-
-            # LINEに返信
-            reply_message(reply_token, response)
+            if "運勢" in user_message or "金運" in user_message or "恋愛" in user_message or "ラッキーカラー" in user_message:
+                reply_message(reply_token, user_fortunes[user_id]["fortune"])
 
     return jsonify(status=200)
 
 
-# LINEメッセージ送信関数
 def reply_message(reply_token, message):
     line_token = os.environ.get("CHANNEL_ACCESS_TOKEN")
     headers = {
@@ -78,8 +52,7 @@ def reply_message(reply_token, message):
         "replyToken": reply_token,
         "messages": [{"type": "text", "text": message}]
     }
-    response = requests.post("https://api.line.me/v2/bot/message/reply", headers=headers, json=body)
-    print(f"LINE API Response: {response.status_code}, {response.text}")
+    requests.post("https://api.line.me/v2/bot/message/reply", headers=headers, json=body)
 
 
 if __name__ == "__main__":
