@@ -64,3 +64,9 @@ def reply_message(reply_token, message):
         "messages": [{"type": "text", "text": message}]
     }
     requests.post("https
+    from shortener import shorten_url
+
+# 例: URL短縮して出力
+test_url = "https://chapro.jp/prompt/67185"
+short_url = shorten_url(test_url)
+print(f"短縮URL: {short_url}")
