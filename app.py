@@ -1,3 +1,27 @@
+import os
+import requests
+from shortener import shorten_url  # 必ず先頭に移動！
+
+def reply_message(reply_token, message):
+    line_token = os.environ.get("CHANNEL_ACCESS_TOKEN")
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {line_token}"
+    }
+    
+    # URL短縮処理
+    long_url = "https://chapro.jp/prompt/67185"
+    short_url = shorten_url(long_url)
+
+    body = {
+        "replyToken": reply_token,
+        "messages": [{"type": "text", "text": f"短縮URL: {short_url}"}]
+    }
+
+    # LINE Messaging APIに送信
+    response = requests.post("https://api.line.me/v2/bot/message/reply", headers=headers, json=body)
+    if response.status_code != 200:
+        print(f"エラー: {response.status_code}, 内容: {response.text}")
 import requests
 import os
 from flask import Flask, request, jsonify
