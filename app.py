@@ -87,7 +87,7 @@ def reply_message(reply_token, message):
         "replyToken": reply_token,
         "messages": [{"type": "text", "text": message}]
     }
-    requests.post("https
+    requests.post("https://api.line.me/v2/bot/message/reply", headers=headers, json=body)
     from shortener import shorten_url
 
 # 例: URL短縮して出力
