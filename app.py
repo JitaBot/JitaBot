@@ -2,65 +2,70 @@ import os
 import requests
 from flask import Flask, request, jsonify
 import random
+import datetime
 
 app = Flask(__name__)
 
-# 運勢メッセージリスト
-fortune_messages = [
-    "🌟 大吉：今日は素晴らしい一日になる予感！",
-    "🌸 中吉：穏やかに過ごせる日です。",
-    "🏔️ 吉：安定した運気が流れています。",
-    "🌑 凶：慎重に行動するのが吉。",
-]
+# 占いメッセージ（関西弁）
+fortune_messages = {
+    "運勢": ["🌟 大吉：今日は素晴らしい1日になりそうやで！", 
+              "🌸 中吉：穏やかでええ感じの日になるわ！", 
+              "🌙 吉：安定した運気が流れとるで！", 
+              "💀 凶：慎重に行動するのが吉やな。"],
+    "金運": ["💴 今日は財布の紐、しっかり締めるんやで！", 
+             "💰 思わぬ臨時収入があるかも知れへんで！", 
+             "🌠 金の流れは星の巡りにも関係しとるで！"],
+    "恋愛": ["💞 今日は運命の出会いがあるかもしれへんで！", 
+             "💕 恋のチャンス、逃したらあかんで！", 
+             "💔 今日は一歩引いて相手を見つめ直す日やな。"],
+    "ラッキーカラー": ["🎨 今日のラッキーカラーは『ピンク』やで！", 
+                        "🎨 今日のラッキーカラーは『ブルー』やで！", 
+                        "🎨 今日のラッキーカラーは『ゴールド』やで！"]
+}
 
-# 恋愛メッセージリスト
-love_messages = [
-    "💞恋の行方が気になるんか？ええやん、ええやん！ほな、ワシが星に聞いたるわ！",
-    "🌹恋愛運か？今日は星がええ感じに輝いとるで！チャンスには素直になってみるんやで！",
-    "💔あらま…ちょっと慎重にいかなあかんかもしれへんな。焦らんと、ゆっくり様子見や！",
-    "🔮今日はロマンチックな出会いの予感があるで！目ぇ離したらもったいないかもな！",
-    "💡好きな人にひと言、勇気出して声かけるタイミングかもしれんで？星も応援しとるわ！",
-]
+# ユーザーごとのデータ管理（シンプル版）
+user_data = {}
 
-# 金運メッセージリスト
-money_messages = [
-    "💰今日は金運ええ感じやで！財布の紐は締めつつ、ええタイミングで使ってみ？",
-    "🌌金の流れは星の巡りにも関係しとるで！今日は臨時収入の予感がするわ！",
-    "💸おっと、今日は財布の紐をしっかり締める日やな！油断は禁物やで！",
-]
-
-# ラッキーカラーメッセージリスト
-lucky_colors = ["🔴赤", "🔵青", "🟢緑", "🟡黄", "🟣紫", "🟤茶", "⚪白", "⚫黒", "🟠オレンジ", "🌸ピンク"]
-
+# Webhookエンドポイント
 @app.route("/webhook", methods=["POST"])
 def webhook():
     event = request.json
     for e in event["events"]:
         if e["type"] == "message" and e["message"]["type"] == "text":
+            user_id = e["source"]["userId"]
             reply_token = e["replyToken"]
-            user_message = e["message"]["text"].lower()
+            user_message = e["message"]["text"]
 
-            # メッセージ内容に応じて返信内容を決定
-            if "今日の運勢" in user_message or "運勢" in user_message:
-                fortune = random.choice(fortune_messages)
-                reply_message(reply_token, fortune)
+            # ログ出力
+            print(f"[{datetime.datetime.now()}] User: {user_id}, Message: {user_message}")
 
-            elif any(word in user_message for word in ["恋愛", "好きな人", "片思い", "結婚", "恋"]):
-                love = random.choice(love_messages)
-                reply_message(reply_token, love)
+            # 今日の日付取得
+            today = datetime.date.today().isoformat()
 
-            elif "金運" in user_message:
-                money = random.choice(money_messages)
-                reply_message(reply_token, money)
+            # 1日1回の結果固定処理
+            if user_id not in user_data or user_data[user_id].get("date") != today:
+                user_data[user_id] = {"date": today, "results": {}}
 
-            elif "ラッキーカラー" in user_message:
-                color = random.choice(lucky_colors)
-                reply_message(reply_token, f"🎨今日のラッキーカラーは『{color}』やで！")
+            # キーワードに基づく応答
+            response = None
+            for keyword, messages in fortune_messages.items():
+                if keyword in user_message:
+                    # 1日1回固定結果取得
+                    if keyword not in user_data[user_id]["results"]:
+                        result = random.choice(messages)
+                        user_data[user_id]["results"][keyword] = result
+                    response = user_data[user_id]["results"][keyword]
+                    break
 
-            else:
-                reply_message(reply_token, "🤖 すんまへん、その質問には答えられへんみたいやわ。")
+            # 該当する応答がない場合のデフォルトメッセージ
+            if not response:
+                response = "🤖 すまんけど、その質問には答えられへんわ。"
+
+            # LINEに返信
+            reply_message(reply_token, response)
 
     return jsonify(status=200)
+
 
 # LINEメッセージ送信関数
 def reply_message(reply_token, message):
@@ -73,7 +78,9 @@ def reply_message(reply_token, message):
         "replyToken": reply_token,
         "messages": [{"type": "text", "text": message}]
     }
-    requests.post("https://api.line.me/v2/bot/message/reply", headers=headers, json=body)
+    response = requests.post("https://api.line.me/v2/bot/message/reply", headers=headers, json=body)
+    print(f"LINE API Response: {response.status_code}, {response.text}")
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
