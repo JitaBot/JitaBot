@@ -1,5 +1,6 @@
 import os
 import requests
+import json
 from shortener import shorten_url  # 必ず先頭に移動！
 
 def reply_message(reply_token, message):
@@ -97,3 +98,23 @@ print(f"短縮URL: {short_url}")
 # 短縮URLテスト
 test_url = "https://example.com/very/long/url/path"
 print(shorten_url(test_url))
+def shorten_url(long_url):
+    token = os.environ.get("BITLY_API_TOKEN")
+    url = "https://api-ssl.bitly.com/v4/shorten"
+
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Content-Type": "application/json"
+    }
+
+    data = {
+        "long_url": long_url,
+        "domain": "bit.ly"
+    }
+
+    response = requests.post(url, headers=headers, data=json.dumps(data))
+    
+    if response.status_code == 200:
+        return response.json().get("link")
+    else:
+        return f"URL短縮失敗: {response.status_code}, 内容: {response.text}"
