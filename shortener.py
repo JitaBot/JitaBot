@@ -22,3 +22,4 @@ def shorten_url(long_url):
     except Exception as e:
         print(f"URL短縮エラー: {e}")
         return "URL短縮エラー発生"
+        print(f"URL短縮失敗: ステータスコード={response.status_code}, レスポンス={response.text}")
