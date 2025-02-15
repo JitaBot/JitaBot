@@ -70,3 +70,6 @@ def reply_message(reply_token, message):
 test_url = "https://chapro.jp/prompt/67185"
 short_url = shorten_url(test_url)
 print(f"短縮URL: {short_url}")
+# 短縮URLテスト
+test_url = "https://example.com/very/long/url/path"
+print(shorten_url(test_url))
