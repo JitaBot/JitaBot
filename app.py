@@ -1,22 +1,33 @@
+import requests
+import os
 from flask import Flask, request, jsonify
 import random
-import datetime
-import os
-import requests
 
 app = Flask(__name__)
 
-# 運勢メッセージリスト
+# 運勢メッセージ
 fortune_messages = [
-    "🌟 大吉：今日は素晴らしい1日になりそうやで！",
-    "🌸 中吉：穏やかに過ごせる日やで〜。",
-    "🎋 小吉：安定した運気が流れてるわ！",
+    "🌟 大吉：今日は素晴らしい一日になりそうやで！",
+    "🌸 中吉：穏やかに過ごせる日になりそうやで。",
+    "🎋 小吉：落ち着いて行動すればええ日になるで！",
     "💀 凶：慎重に行動するのが吉やな。"
 ]
 
-# ユーザーごとの運勢を保存する辞書
-user_fortunes = {}
+# URL短縮関数
+def shorten_url(long_url):
+    bitly_token = os.environ.get("BITLY_ACCESS_TOKEN")
+    headers = {
+        "Authorization": f"Bearer {bitly_token}",
+        "Content-Type": "application/json"
+    }
+    payload = {"long_url": long_url}
+    response = requests.post("https://api-ssl.bitly.com/v4/shorten", headers=headers, json=payload)
+    if response.status_code == 200:
+        return response.json().get("link")
+    else:
+        return f"エラー: {response.status_code}"
 
+# Webhookエンドポイント
 @app.route("/webhook", methods=["POST"])
 def webhook():
     event = request.json
@@ -24,24 +35,24 @@ def webhook():
         if e["type"] == "message" and e["message"]["type"] == "text":
             reply_token = e["replyToken"]
             user_message = e["message"]["text"]
-            user_id = e["source"]["userId"]
 
-            # 今日の日付を取得
-            today = datetime.date.today().strftime("%Y-%m-%d")
+            # URL短縮機能
+            if user_message.startswith("URL短縮"):
+                url_to_shorten = user_message.split(" ", 1)[-1]
+                short_url = shorten_url(url_to_shorten)
+                reply_message(reply_token, f"短縮URL: {short_url}")
 
-            # ユーザーごとの運勢を1日1回だけ設定
-            if user_id not in user_fortunes or user_fortunes[user_id]["date"] != today:
-                user_fortunes[user_id] = {
-                    "fortune": random.choice(fortune_messages),
-                    "date": today
-                }
+            # 占い機能（運勢、金運、恋愛、ラッキーカラー）
+            elif any(keyword in user_message for keyword in ["今日の運勢", "運勢", "金運", "恋愛", "ラッキーカラー"]):
+                fortune = random.choice(fortune_messages)
+                reply_message(reply_token, fortune)
 
-            if "運勢" in user_message or "金運" in user_message or "恋愛" in user_message or "ラッキーカラー" in user_message:
-                reply_message(reply_token, user_fortunes[user_id]["fortune"])
+            else:
+                reply_message(reply_token, "🤖 すんまへん、その質問には答えられへんわ。")
 
     return jsonify(status=200)
 
-
+# LINEメッセージ返信関数
 def reply_message(reply_token, message):
     line_token = os.environ.get("CHANNEL_ACCESS_TOKEN")
     headers = {
@@ -52,8 +63,4 @@ def reply_message(reply_token, message):
         "replyToken": reply_token,
         "messages": [{"type": "text", "text": message}]
     }
-    requests.post("https://api.line.me/v2/bot/message/reply", headers=headers, json=body)
-
-
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    requests.post("https
