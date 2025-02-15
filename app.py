@@ -61,3 +61,8 @@ def webhook():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
+    from bitly_test import check_bitly_api
+
+# Render起動時に1回だけAPI確認
+check_bitly_api()
+
