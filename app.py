@@ -118,3 +118,5 @@ def shorten_url(long_url):
         return response.json().get("link")
     else:
         return f"URL短縮失敗: {response.status_code}, 内容: {response.text}"
+        print(f"BITLY_API_TOKEN: {os.environ.get('BITLY_API_TOKEN')}")
+        
