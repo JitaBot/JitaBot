@@ -10,3 +10,5 @@ services:
         sync: false
       - key: LINE_CHANNEL_SECRET
         sync: false
+environment:
+  python_version: "3.10"
