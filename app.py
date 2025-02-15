@@ -24,7 +24,7 @@ def webhook():
             user_message = e["message"]["text"]
 
             # 今日の運勢リクエストに応答
-            if "今日の運勢" in user_message:
+            if "今日の運勢" in user_message.strip():
                 fortune = random.choice(fortune_messages)
                 reply_message(reply_token, fortune)
 
