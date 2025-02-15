@@ -23,3 +23,4 @@ def shorten_url(long_url):
         print(f"URL短縮エラー: {e}")
         return "URL短縮エラー発生"
         print(f"URL短縮失敗: ステータスコード={response.status_code}, レスポンス={response.text}")
+print(f"URL短縮失敗: {response.status_code}, {response.text}")         
