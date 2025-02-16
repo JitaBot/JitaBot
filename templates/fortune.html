@@ -2,53 +2,62 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>今日の運勢 - 占星ガイドポータル</title>
+    <title>運勢ガイド - JitaBot</title>
     <style>
         body {
-            background: linear-gradient(135deg, #6e45e2, #88d3ce);
+            background: linear-gradient(135deg, #2c3e50, #34495e);
             color: #fff;
             text-align: center;
-            padding: 50px;
             font-family: 'Helvetica Neue', sans-serif;
+            margin: 0;
+            padding: 50px;
+            position: relative;
+            overflow: hidden;
         }
-        h1 {
-            margin-bottom: 30px;
-            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+
+        .fortune-box {
+            margin-top: 50px;
+            padding: 30px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            z-index: 2;
+            position: relative;
         }
-        p {
-            font-size: 1.1em;
-            margin-top: 20px;
-            line-height: 1.6;
-            text-align: left;
-            margin: 0 auto;
-            max-width: 700px;
+
+        .fortune-box h2 {
+            margin-bottom: 25px;
+            font-size: 2em;
         }
-        a {
-            text-decoration: none;
-            color: #fff;
-            display: inline-block;
-            margin-top: 30px;
-            background: rgba(255,255,255,0.2);
-            padding: 15px 30px;
-            border-radius: 10px;
-            box-shadow: 3px 3px 7px rgba(0,0,0,0.5);
-            transition: background 0.3s;
+
+        .stars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 1px, transparent 1px);
+            background-size: 3px 3px;
+            animation: moveStars 20s linear infinite;
         }
-        a:hover {
-            background: rgba(255,255,255,0.4);
+
+        @keyframes moveStars {
+            0% { background-position: 0 0; }
+            100% { background-position: 1000px 1000px; }
         }
     </style>
 </head>
 <body>
-    <h1>🔮 今日の運勢</h1>
-    <p>
-        今日はどんな一日になるか、気になったりするやろ？  
-        実は昔、ギリシャの哲学者プラトンも「星は神の言葉」やと言ってたんやで。  
-        星の動きは、地球で起こる出来事とリンクしてる。これを読めば、  
-        今日が挑戦の日か、休息の日かが見えてくるんや。  
-        ほな、星が伝える今日のアドバイス、じっくり見てってな！
-    </p>
-    <a href="/">← ポータルに戻る</a>
+    <div class="stars"></div>
+    <h1>🔮 今日の運勢 🔮</h1>
+    <div class="fortune-box">
+        <h2>{{ fortune.date }}</h2>
+        <p>💬 {{ fortune.fortune }}</p>
+        <p>🎨 ラッキーカラー：{{ fortune.lucky_color }}</p>
+        <p>🔢 ラッキーナンバー：{{ fortune.lucky_number }}</p>
+    </div>
+    <p style="margin-top: 40px;">✨ Powered by JitaBot ✨</p>
 </body>
 </html>
