@@ -1,4 +1,3 @@
-# fortune_logic.py
 from datetime import datetime
 import random
 
@@ -15,7 +14,7 @@ fortune_templates = [
 def generate_fortune():
     today = datetime.now().strftime("%Y-%m-%d")
     fortune = random.choice(fortune_templates)
-    lucky_color = random.choice(["青", "赤", "緑", "黄色", "紫"])
+    lucky_color = random.choice(["青", "赤", "緑", "黄色", "紫", "ピンク", "オレンジ", "白", "黒"])
     lucky_number = random.randint(1, 99)
     return {
         "date": today,

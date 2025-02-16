@@ -1,14 +1,6 @@
 services:
   - type: web
-    name: JitaBot
+    name: jitabot-1
     env: python
-    plan: free
-    buildCommand: pip install -r requirements.txt
-    startCommand: python main.py
-    envVars:
-      - key: LINE_CHANNEL_ACCESS_TOKEN
-        sync: false
-      - key: LINE_CHANNEL_SECRET
-        sync: false
-environment:
-  python_version: "3.10"
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "python app.py"
