@@ -1,3 +1,4 @@
+from fortune_logic import generate_fortune
 from flask import Flask, request
 import json
 from fortune_logic import generate_fortune
