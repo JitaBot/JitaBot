@@ -5,156 +5,115 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🔮占星ガイドポータル🔮</title>
     <style>
+        /* 🌌 背景を星空に設定 */
         body {
-            background: linear-gradient(135deg, #6e45e2, #88d3ce);
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            background: url('https://i.ibb.co/yPJN6qx/starfield.png') no-repeat center center fixed;
+            background-size: cover;
             color: #fff;
             font-family: 'Helvetica Neue', sans-serif;
             text-align: center;
-            padding: 50px;
-            margin: 0;
+            padding-top: 50px;
+            position: relative;
+            overflow: hidden;
         }
 
+        /* ⭐️ 星を動かすアニメーション */
+        body::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 1px, transparent 1px);
+            background-size: 3px 3px;
+            animation: moveStars 20s linear infinite;
+            z-index: 1;
+        }
+
+        @keyframes moveStars {
+            0% {
+                background-position: 0 0;
+            }
+            100% {
+                background-position: 1000px 1000px;
+            }
+        }
+
+        /* 🌟 タイトル設定 */
         h1 {
             margin-bottom: 30px;
-            text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
-            font-size: 2.2em; /* フォントサイズを調整 */
-            line-height: 1.2;
-            word-wrap: break-word;
-            max-width: 100%;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+            font-size: 2.5em;
+            z-index: 2;
+            position: relative;
         }
 
+        /* 💬 サブテキスト */
+        p {
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+            z-index: 2;
+            position: relative;
+        }
+
+        /* 🔗 リンクボタン */
         .link-container {
             margin-top: 30px;
             display: flex;
-            flex-direction: column; /* 縦に並べる */
-            gap: 20px; /* リンク間の余白 */
-            align-items: center; /* 中央揃え */
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+            z-index: 2;
+            position: relative;
         }
 
         .link {
             text-decoration: none;
             color: #fff;
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(0, 0, 0, 0.4);
             padding: 15px 30px;
             border-radius: 10px;
             transition: background 0.3s;
             width: 80%;
             max-width: 400px;
             box-shadow: 3px 3px 7px rgba(0, 0, 0, 0.5);
-            font-size: 1.1em;
         }
 
         .link:hover {
             background: rgba(255, 255, 255, 0.4);
         }
 
+        /* 🛠️ フッター */
         p.footer {
             margin-top: 50px;
             font-size: 0.9em;
             color: #ddd;
+            z-index: 2;
+            position: relative;
         }
-    </style>body {
-    margin: 0;
-    padding: 0;
-    height: 100vh;
-    background: url('https://i.ibb.co/yPJN6qx/starfield.png') no-repeat center center fixed;
-    background-size: cover;
-    color: #fff;
-    font-family: 'Helvetica Neue', sans-serif;
-    text-align: center;
-    padding-top: 50px;
-    position: relative;
-    overflow: hidden;
-}
-
-/* 星を動かすアニメーション */
-body::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 1px, transparent 1px);
-    background-size: 3px 3px;
-    animation: moveStars 20s linear infinite;
-    z-index: 1;
-}
-
-/* 星の動きのアニメーション */
-@keyframes moveStars {
-    0% {background-position: 0 0;}
-    100% {background-position: 1000px 1000px;}
-}
-
-/* 見出し */
-h1 {
-    margin-bottom: 30px;
-    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
-    font-size: 2.5em;
-    z-index: 2;
-    position: relative;
-}
-
-/* サブテキスト */
-p {
-    margin-bottom: 40px;
-    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
-    z-index: 2;
-    position: relative;
-}
-
-/* リンクボタン */
-.link-container {
-    margin-top: 30px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    align-items: center;
-    z-index: 2;
-    position: relative;
-}
-
-.link {
-    text-decoration: none;
-    color: #fff;
-    background: rgba(0, 0, 0, 0.4);
-    padding: 15px 30px;
-    border-radius: 10px;
-    transition: background 0.5s;
-    box-shadow: 3px 3px 7px rgba(0, 0, 0, 0.5);
-    width: 80%;
-    max-width: 400px;
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
-}
-
-.link:hover {
-    background: rgba(255, 255, 255, 0.2);
-}
-
-/* フッター */
-footer {
-    margin-top: 50px;
-    color: #ddd;
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
-    z-index: 2;
-    position: relative;
-}
+    </style>
 </head>
 <body>
-
+    <!-- 🔮 タイトル -->
     <h1>🔮 占星ガイドポータル 🔮</h1>
+
+    <!-- 💬 サブテキスト -->
     <p>占星術の世界を深掘りできるリンク集やで！</p>
 
+    <!-- 🔗 リンク集 -->
     <div class="link-container">
-    <a href="/fortune" class="link" target="_blank">🔮 今日の運勢</a>
-    <a href="/love" class="link" target="_blank">💖 恋愛運ガイド</a>
-    <a href="/money" class="link" target="_blank">💰 金運ガイド</a>
-    <a href="/luck-color" class="link" target="_blank">🎨 ラッキーカラー</a>
-    <a href="/subscription" class="link" target="_blank">📖 占星ガイド購読</a>
-</div>
+        <a href="https://bit.ly/3EyY0M3" class="link" target="_blank">🔗 リンク1</a>
+        <a href="https://bit.ly/3EGHkSY" class="link" target="_blank">🔗 リンク2</a>
+        <a href="https://bit.ly/417usNs" class="link" target="_blank">🔗 リンク3</a>
+        <a href="https://bit.ly/3ECg6ga" class="link" target="_blank">🔗 リンク4</a>
+        <a href="https://bit.ly/4hBaWjp" class="link" target="_blank">🔗 リンク5</a>
+    </div>
 
+    <!-- 🌠 フッター -->
     <p class="footer">✨ Powered by JitaBot ✨</p>
-
 </body>
 </html>
