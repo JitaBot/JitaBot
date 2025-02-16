@@ -41,27 +41,27 @@
             to { background-position: 1000px 1000px; }
         }
 
-        /* 流れ星アニメーション */
+        /* 流れ星アニメーション（左下に流れるように修正） */
         .shooting-star {
             position: absolute;
             top: 20%;
-            left: -100px;
+            right: -100px;
             width: 150px;
             height: 2px;
-            background: linear-gradient(45deg, #fff, rgba(255, 255, 255, 0));
-            transform: rotate(-45deg);
+            background: linear-gradient(225deg, #fff, rgba(255, 255, 255, 0));
+            transform: rotate(45deg);
             animation: shooting 5s linear infinite;
             z-index: 1;
         }
 
         @keyframes shooting {
             0% {
-                left: -100px;
+                right: -100px;
                 top: 20%;
                 opacity: 1;
             }
             100% {
-                left: 110%;
+                right: 110%;
                 top: 60%;
                 opacity: 0;
             }
