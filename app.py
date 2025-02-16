@@ -3,12 +3,11 @@ import json
 import random
 import requests
 from flask import Flask, request
-from shortener import shorten_url
 from utils import get_random_fortune
 
 app = Flask(__name__)
 
-# LINEメッセージ返信
+# LINEメッセージ返信関数
 def reply_message(reply_token, message):
     line_token = os.environ.get("CHANNEL_ACCESS_TOKEN")
     headers = {
@@ -46,23 +45,15 @@ def webhook():
             color = random.choice(colors)
             reply_message(reply_token, f"🎨 今日のラッキーカラーは『{color}』やで！")
 
-        elif "占星リンク" in user_message:
-            long_url = "https://chapro.jp/prompt/67185"
-            short_url = shorten_url(long_url)
-            reply_message(reply_token, f"🔗 星占いの参考リンクやで！：{short_url}")
-
         else:
             reply_message(reply_token, "🤖 すんまへん、その質問にはまだ答えられへんねん…。")
 
         return "OK"
+
     except Exception as e:
         print(f"エラー発生: {e}")
         return "Internal Server Error", 500
 
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
-    from bitly_test import check_bitly_api
-
-# Render起動時に1回だけAPI確認
-check_bitly_api()
-
