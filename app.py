@@ -15,14 +15,16 @@ def reply_message(reply_token, message):
     }
     body = {
         "replyToken": reply_token,
-        "messages": [{"type": "text", "text": message}]
+        "   messages": [{"type": "text", "text": message}]
     }
     requests.post("https://api.line.me/v2/bot/message/reply", headers=headers, data=json.dumps(body))
-
 @app.route("/webhook", methods=["POST"])
 def webhook():
     try:
-        data = request.json
+        data = request.get_json()
+        if not data:
+            return "No data", 400
+
         reply_token = data["events"][0]["replyToken"]
         user_message = data["events"][0]["message"]["text"]
 
@@ -37,12 +39,13 @@ def webhook():
             )
             reply_message(reply_token, response_text)
         else:
-            reply_message(reply_token, "😢 すまん、わからんわ…")
+            reply_message(reply_token, "🤖 わからんわ…もうちょっと具体的に頼むわ！")
 
         return "OK", 200
+
     except Exception as e:
         print(f"エラー発生: {e}")
         return "Internal Server Error", 500
-
+            
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
