@@ -3,60 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🔮 占星ガイドポータル 🔮</title>
+    <title>🔮占星ガイドポータル🔮</title>
+    <!-- 幻想的なフォント読み込み -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <style>
-        /* 全体のスタイル */
+        /* 背景設定 */
         body {
             margin: 0;
             padding: 0;
             height: 100vh;
-            background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+            background: linear-gradient(to bottom, #0d1b2a, #1b263b);
             color: #fff;
-            font-family: 'Helvetica Neue', sans-serif;
+            font-family: 'Playfair Display', serif;
             text-align: center;
             padding-top: 50px;
             position: relative;
             overflow: hidden;
         }
 
-        /* 星のアニメーション */
-        body::after {
+        /* 星アニメーションの設定 */
+        body::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 1px, transparent 1px);
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 1px, transparent 2px);
             background-size: 3px 3px;
-            animation: moveStars 20s linear infinite;
+            z-index: 0;
+            animation: twinkling 30s linear infinite;
+        }
+
+        /* 星が瞬くアニメーション */
+        @keyframes twinkling {
+            from { background-position: 0 0; }
+            to { background-position: 1000px 1000px; }
+        }
+
+        /* 流れ星アニメーション */
+        .shooting-star {
+            position: absolute;
+            top: 20%;
+            left: -100px;
+            width: 150px;
+            height: 2px;
+            background: linear-gradient(45deg, #fff, rgba(255, 255, 255, 0));
+            transform: rotate(-45deg);
+            animation: shooting 5s linear infinite;
             z-index: 1;
         }
 
-        @keyframes moveStars {
-            0% { background-position: 0 0; }
-            100% { background-position: 1000px 1000px; }
+        @keyframes shooting {
+            0% {
+                left: -100px;
+                top: 20%;
+                opacity: 1;
+            }
+            100% {
+                left: 110%;
+                top: 60%;
+                opacity: 0;
+            }
         }
 
-        /* 見出し */
+        /* タイトルデザイン */
         h1 {
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+            margin-bottom: 30px;
+            text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.7);
             font-size: 2.5em;
             z-index: 2;
             position: relative;
         }
 
-        /* サブテキスト */
-        p.subtitle {
+        /* サブタイトル */
+        p {
             margin-bottom: 40px;
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
             z-index: 2;
             position: relative;
         }
 
-        /* リンクボタンコンテナ */
+        /* リンクボタンのデザイン */
         .link-container {
+            margin-top: 30px;
             display: flex;
             flex-direction: column;
             gap: 20px;
@@ -65,27 +95,28 @@
             position: relative;
         }
 
-        /* 各リンクボタン */
         .link {
             text-decoration: none;
             color: #fff;
-            background: rgba(0, 0, 0, 0.4);
+            background: rgba(0, 0, 0, 0.5);
             padding: 15px 30px;
             border-radius: 10px;
             transition: background 0.3s;
             width: 80%;
             max-width: 400px;
-            box-shadow: 3px 3px 7px rgba(0, 0, 0, 0.5);
+            box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.5);
+            font-weight: bold;
             backdrop-filter: blur(5px);
         }
 
         .link:hover {
             background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
         }
 
-        /* フッター */
+        /* フッターテキスト */
         p.footer {
-            margin-top: 50px;
+            margin-top: 60px;
             font-size: 0.9em;
             color: #ddd;
             z-index: 2;
@@ -94,19 +125,22 @@
     </style>
 </head>
 <body>
-    <!-- メインタイトル -->
+    <!-- 流れ星を複数追加 -->
+    <div class="shooting-star" style="top: 15%; animation-delay: 0s;"></div>
+    <div class="shooting-star" style="top: 35%; animation-delay: 2s;"></div>
+    <div class="shooting-star" style="top: 50%; animation-delay: 4s;"></div>
+
+    <!-- メインコンテンツ -->
     <h1>🔮 占星ガイドポータル 🔮</h1>
+    <p>占星術の世界を深掘りできるリンク集やで！</p>
 
-    <!-- サブタイトル -->
-    <p class="subtitle">占星術の世界を深掘りできるリンク集やで！</p>
-
-    <!-- リンクボタン -->
+    <!-- リンクボタンリスト -->
     <div class="link-container">
         <a href="/fortune" class="link">🔍 運勢ガイド</a>
         <a href="/love" class="link">💖 恋愛ガイド</a>
         <a href="/money" class="link">💰 金運ガイド</a>
         <a href="/luck-color" class="link">🎨 ラッキーカラーガイド</a>
-        <a href="/subscription" class="link">🌟 サブスク登録案内</a>
+        <a href="/subscription" class="link">👑 サブスク登録案内</a>
     </div>
 
     <!-- フッター -->
