@@ -1,7 +1,5 @@
 from flask import Flask, request
 import json
-import random
-from datetime import datetime
 from fortune_logic import generate_fortune
 import requests
 import os
@@ -40,7 +38,7 @@ def webhook():
         else:
             reply_message(reply_token, "😢 すまん、わからんわ…")
 
-        return "OK"
+        return "OK", 200
     except Exception as e:
         print(f"エラー発生: {e}")
         return "Internal Server Error", 500
