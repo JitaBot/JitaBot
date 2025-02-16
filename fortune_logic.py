@@ -1,6 +1,8 @@
+# fortune_logic.py
 from datetime import datetime
 import random
 
+# 運勢メッセージテンプレート
 fortune_templates = [
     "今日はエネルギッシュな一日！自分の直感を信じて行動しよう。",
     "静かに自分と向き合う時間を作ると、新たな発見があるかも。",
@@ -9,6 +11,7 @@ fortune_templates = [
     "努力が報われる兆しあり！粘り強く挑戦を続けよう。"
 ]
 
+# 運勢データ生成関数
 def generate_fortune():
     today = datetime.now().strftime("%Y-%m-%d")
     fortune = random.choice(fortune_templates)
