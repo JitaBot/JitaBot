@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🔮占星ガイドポータル🔮</title>
     <style>
-        /* --- 🎨 基本スタイル --- */
+        /* --- 🌌 背景と基本スタイル --- */
         body {
             margin: 0;
             padding: 0;
             height: 100vh;
-            background: radial-gradient(circle at top left, #1a1a2e, #16213e);
+            background: radial-gradient(circle at top left, #0d1b2a, #1b263b);
             color: #fff;
             font-family: 'Helvetica Neue', sans-serif;
             text-align: center;
@@ -20,11 +20,10 @@
         }
 
         /* --- 🌠 流れ星アニメーション --- */
-        body::after {
-            content: '';
+        .shooting-star {
             position: absolute;
-            top: -200px;  /* 流れ星のスタート位置（画面外上部） */
-            right: -200px; /* 流れ星のスタート位置（画面外右端） */
+            top: -200px;
+            right: -200px;
             width: 300px;
             height: 2px;
             background: linear-gradient(135deg, #fff, rgba(255, 255, 255, 0));
@@ -45,7 +44,38 @@
             }
         }
 
-        /* --- 🖼️ ヘッダー部分 --- */
+        /* --- 🌟 ランダムな流れ星配置 --- */
+        .shooting-star:nth-child(1) {
+            top: -100px;
+            right: -100px;
+            animation-delay: 0s;
+        }
+
+        .shooting-star:nth-child(2) {
+            top: -300px;
+            right: -200px;
+            animation-delay: 2s;
+        }
+
+        .shooting-star:nth-child(3) {
+            top: -500px;
+            right: -50px;
+            animation-delay: 4s;
+        }
+
+        .shooting-star:nth-child(4) {
+            top: -250px;
+            right: -300px;
+            animation-delay: 3s;
+        }
+
+        .shooting-star:nth-child(5) {
+            top: -150px;
+            right: -400px;
+            animation-delay: 5s;
+        }
+
+        /* --- 🖼️ ヘッダー --- */
         h1 {
             margin-bottom: 30px;
             text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
@@ -100,11 +130,18 @@
     </style>
 </head>
 <body>
+    <!-- 🌠 複数の流れ星を生成 -->
+    <div class="shooting-star"></div>
+    <div class="shooting-star"></div>
+    <div class="shooting-star"></div>
+    <div class="shooting-star"></div>
+    <div class="shooting-star"></div>
+
     <!-- 🔮 ヘッダー -->
     <h1>🔮 占星ガイドポータル 🔮</h1>
     <p>占星術の世界をちょっと深掘りできる解説！</p>
 
-    <!-- 🌌 リンクリスト -->
+    <!-- 🔗 リンクリスト -->
     <div class="link-container">
         <a href="/fortune" class="link">🔍 運勢ガイド</a>
         <a href="/love" class="link">💖 恋愛ガイド</a>
